@@ -1,0 +1,63 @@
+{
+  // -----------------------------------------------------------------------------
+  // File: sttm_prompt_to_file.json
+  // Purpose: Source-to-Target Mapping for prompt-driven CI/CD configuration
+  // Maps prompt fields to generated files, sections, and transformation logic.
+  // -----------------------------------------------------------------------------
+  "mappings": [
+    {
+      "source_prompt": "cicd_pipeline_prompt.json",
+      "source_field": "workflow_name",
+      "target_file": ".github/workflows/cicd_pipeline.yml",
+      "target_section/step": "name",
+      "transformation": "Direct mapping",
+      "data_type": "string",
+      "quality_check": "Name is present and non-empty"
+    },
+    {
+      "source_prompt": "cicd_pipeline_prompt.json",
+      "source_field": "triggers",
+      "target_file": ".github/workflows/cicd_pipeline.yml",
+      "target_section/step": "on",
+      "transformation": "YAML list expansion",
+      "data_type": "array",
+      "quality_check": "Events correctly declared"
+    },
+    {
+      "source_prompt": "cicd_pipeline_prompt.json",
+      "source_field": "steps",
+      "target_file": ".github/workflows/cicd_pipeline.yml",
+      "target_section/step": "jobs.deploy.steps",
+      "transformation": "Iterative step conversion",
+      "data_type": "object[]",
+      "quality_check": "Step order and parameterization"
+    },
+    {
+      "source_prompt": "dab_config_prompt.json",
+      "source_field": "bundle_name",
+      "target_file": "databricks.yml",
+      "target_section/step": "bundle.name",
+      "transformation": "Direct mapping",
+      "data_type": "string",
+      "quality_check": "Valid YAML key"
+    },
+    {
+      "source_prompt": "dab_config_prompt.json",
+      "source_field": "targets",
+      "target_file": "databricks.yml",
+      "target_section/step": "targets",
+      "transformation": "YAML object expansion; env substitution",
+      "data_type": "object",
+      "quality_check": "Keys for dev/qa/prod, all values parameterized"
+    },
+    {
+      "source_prompt": "dab_config_prompt.json",
+      "source_field": "workflows",
+      "target_file": "databricks.yml",
+      "target_section/step": "workflows",
+      "transformation": "YAML workflow block generation",
+      "data_type": "object",
+      "quality_check": "Workflow and task keys present"
+    }
+  ]
+}
