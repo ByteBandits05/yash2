@@ -51,6 +51,20 @@ jobs:
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       # -------------------------------------------------------------
+      # Step 3.1: Print debug envs
+      # -------------------------------------------------------------
+      - name: Print debug envs
+        run: |
+          echo "DATABRICKS_HOST=$DATABRICKS_HOST"
+          echo "AZURE_CLIENT_ID=$AZURE_CLIENT_ID"
+          echo "AZURE_TENANT_ID=$AZURE_TENANT_ID"
+          # Do not echo secrets in real prod, but check for non-empty
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+      # -------------------------------------------------------------
       # Step 4: Validate Databricks Asset Bundle
       # -------------------------------------------------------------
       - name: Validate bundle configuration
