@@ -76,3 +76,6 @@ jobs:
             exit 1
           fi
           databricks bundle run smoke-test --target dev
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
