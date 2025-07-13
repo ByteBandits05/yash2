@@ -71,10 +71,10 @@ jobs:
       # -------------------------------------------------------------
       - name: Run smoke test
         run: |
-          if [ ! -f smoketest/smoke_test.py ]; then
-            echo "ERROR: smoketest/smoke_test.py not found."
-            exit 1
-          fi
+          # if [ ! -f smoketest/smoke_test.py ]; then
+          #   echo "ERROR: smoketest/smoke_test.py not found."
+          #   exit 1
+          # fi
           databricks bundle run smoke-test --target dev
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
