@@ -53,12 +53,18 @@ jobs:
       # -------------------------------------------------------------
       - name: Validate bundle configuration
         run: databricks bundle validate
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
       # -------------------------------------------------------------
       # Step 5: Deploy Asset Bundle to dev environment
       # -------------------------------------------------------------
       - name: Deploy bundle to dev (force lock)
         run: databricks bundle deploy --target dev --force-lock
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
       # -------------------------------------------------------------
       # Step 6: Run smoke test notebook via Databricks CLI
