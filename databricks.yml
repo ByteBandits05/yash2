@@ -40,7 +40,7 @@ resources:
       # Smoke test task: runs a notebook using a parameterized job cluster
       tasks:
         - task_key: smoke_test_task
-          notebook_task:
+          spark_python_task:
             notebook_path: /Workspace/demo/smoketest/smoke_test.py  # Path to smoke test notebook/script
             source: WORKSPACE
           job_cluster_key: smoke_job_cluster
