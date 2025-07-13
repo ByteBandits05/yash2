@@ -49,4 +49,4 @@ workflows:
       spark_version: ${SMOKE_TEST_SPARK_VERSION}
       node_type_id: ${SMOKE_TEST_NODE_TYPE}
       num_workers: ${SMOKE_TEST_NUM_WORKERS}
-      data_security_mode: ${SMOKE_TEST_SECURITY_MODE}
+     
