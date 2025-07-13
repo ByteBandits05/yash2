@@ -48,16 +48,7 @@ jobs:
           echo "AZURE_TENANT_ID=$AZURE_TENANT_ID"
           # Do not echo secrets in real prod!
 
-      # -------------------------------------------------------------
-      # Step 4: Authenticate with Databricks using OIDC
-      # -------------------------------------------------------------
-      - name: Authenticate via OIDC to Databricks
-        run: |
-          databricks auth login --host "$DATABRICKS_HOST_DEV" \
-            --client-id "$AZURE_CLIENT_ID" \
-            --client-secret "$AZURE_CLIENT_SECRET" \
-            --auth-type oauth \
-            --tenant-id "$AZURE_TENANT_ID"
+    
 
       # -------------------------------------------------------------
       # Step 5: Validate Databricks Asset Bundle
