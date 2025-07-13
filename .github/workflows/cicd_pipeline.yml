@@ -75,4 +75,4 @@ jobs:
             echo "ERROR: smoketest/smoke_test.py not found."
             exit 1
           fi
-          databricks bunlde run --job-name smoke-test --json
+          databricks bundle run --job-name smoke-test --json
