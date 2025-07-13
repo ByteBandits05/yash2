@@ -71,8 +71,8 @@ jobs:
       # -------------------------------------------------------------
       - name: Run smoke test
         run: |
-          if [ ! -f smoketest/smoke_test.py ]; then
-            echo "ERROR: smoketest/smoke_test.py not found."
+          if [ ! -f demo/smoketest/smoke_test.py ]; then
+            echo "ERROR: demo/smoketest/smoke_test.py not found."
             exit 1
           fi
           databricks bundle run smoke-test --target dev
