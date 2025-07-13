@@ -19,7 +19,7 @@
 2. Databricks Asset Bundle YAML (`databricks.yml`):\n\
    - File: `databricks.yml` in repo root.\n\
    - `bundle` section: `name: my_bundle` (placeholder).\n\
-   - `targets` for `dev`, `qa`, `prod` with `workspace` block—host and root_path as `${DATABRICKS_HOST_DEV}`, `${ROOT_PATH_DEV}` (etc).\n\
+   - `targets` for `dev`, `qa`, `prod` with `workspace` block—host, root_path, and file_path as `${DATABRICKS_HOST_DEV}`, `${ROOT_PATH_DEV}`, `${FILE_PATH_DEV}` (etc).\n\
    - Only `dev` has `default: true`.\n\
    - Workflow `smoke-test` to run `/Workspace/smoketest/smoke_test.py` on a serverless cluster; all cluster/resource config as env variable placeholders.\n\
    - All sections commented for clarity, file starts with header.\n\
