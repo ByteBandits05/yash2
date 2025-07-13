@@ -16,9 +16,9 @@ targets:
     # Default deployment target
     default: true
     workspace:
-      host: ${DATABRICKS_HOST_DEV}         # Dev workspace host (parameterized)
-      root_path: ${ROOT_PATH_DEV}          # Dev root path (parameterized)
-      file_path: ${FILE_PATH_DEV}          # Dev file path (parameterized)
+      host: https://adb-3474497264589105.5.azuredatabricks.net/         # Dev workspace host (parameterized)
+      root_path: /Workspace/demo/          # Dev root path (parameterized)
+      file_path: /Workspace/demo/         # Dev file path (parameterized)
   qa:
     workspace:
       host: ${DATABRICKS_HOST_QA}          # QA workspace host (parameterized)
@@ -48,7 +48,7 @@ resources:
         - job_cluster_key: smoke_job_cluster
           new_cluster:
             cluster_name: ""
-            spark_version: ${SMOKE_SPARK_VERSION}
-            node_type_id: ${SMOKE_NODE_TYPE}
-            num_workers: ${SMOKE_NUM_WORKERS}
-            autotermination_minutes: ${SMOKE_AUTOTERM_MINUTES}
+            spark_version: 15.4.x-scala2.12
+            node_type_id: Standard_DS3_v2
+            num_workers: 2
+            autotermination_minutes: 20
