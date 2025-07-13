@@ -7,84 +7,68 @@
 name: Databricks CI/CD Pipeline
 
 on:
-  workflow_dispatch:  # Manual trigger for pipeline
+  workflow_dispatch:
   push:
     branches:
-      - main          # Trigger on push to main branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # Map secrets and environment variables for authentication and deployment
-      AZURE_CLIENT_ID: 8b375910-2621-4694-876b-3015ae92edc7 
-      #${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_TENANT_ID: d9ced490-222c-4024-9de1-428aba0706fc
-      #${{ secrets.AZURE_TENANT_ID }}
-      AZURE_CLIENT_SECRET: cef10c79-b9eb-4f9e-9403-cd481e4b2def
-      #${{ secrets.AZURE_CLIENT_SECRET }}
-      DATABRICKS_HOST_DEV: https://adb-3474497264589105.5.azuredatabricks.net/
-      #${{ secrets.DATABRICKS_HOST_DEV }}
-      ROOT_PATH_DEV: /Workspace/demo/
-      #${{ secrets.ROOT_PATH_DEV }}
-      FILE_PATH_DEV: /Workspace/demo/
-      #${{ secrets.FILE_PATH_DEV }}
+      # These map GitHub secrets to environment variables
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      DATABRICKS_HOST_DEV: ${{ secrets.DATABRICKS_HOST_DEV }}
+      ROOT_PATH_DEV: ${{ secrets.ROOT_PATH_DEV }}
+      FILE_PATH_DEV: ${{ secrets.FILE_PATH_DEV }}
       # Add additional environment variables as needed
 
     steps:
-      # -------------------------------------------------------------
       # Step 1: Checkout repository
-      # -------------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # -------------------------------------------------------------
       # Step 2: Setup Databricks CLI v2
-      # -------------------------------------------------------------
       - name: Setup Databricks CLI v2
         uses: databricks/setup-cli@main
 
-      # -------------------------------------------------------------
       # Step 3: Authenticate with Databricks using OIDC
-      # -------------------------------------------------------------
       - name: Authenticate via OIDC to Databricks
         run: |
-          echo "Authenticating with Databricks via OIDC."
+          databricks auth login --host "$DATABRICKS_HOST_DEV" \
+            --client-id "$AZURE_CLIENT_ID" \
+            --client-secret "$AZURE_CLIENT_SECRET" \
+            --auth-type oauth \
+            --tenant-id "$AZURE_TENANT_ID"
         env:
-          DATABRICKS_HOST: ${{ DATABRICKS_HOST_DEV }}
-          AZURE_CLIENT_ID: ${{ AZURE_CLIENT_ID }}
-          AZURE_TENANT_ID: ${{ AZURE_TENANT_ID }}
-          AZURE_CLIENT_SECRET: ${{ AZURE_CLIENT_SECRET }}
+          DATABRICKS_HOST_DEV: ${{ secrets.DATABRICKS_HOST_DEV }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
 
-      # -------------------------------------------------------------
-      # Step 3.1: Print debug envs
-      # -------------------------------------------------------------
+      # Step 3.1: Print debug envs (for troubleshooting)
       - name: Print debug envs
         run: |
-          echo "DATABRICKS_HOST=$DATABRICKS_HOST"
+          echo "DATABRICKS_HOST_DEV=$DATABRICKS_HOST_DEV"
           echo "AZURE_CLIENT_ID=$AZURE_CLIENT_ID"
           echo "AZURE_TENANT_ID=$AZURE_TENANT_ID"
-          # Do not echo secrets in real prod, but check for non-empty
+          # Do not echo secrets in real prod!
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+          DATABRICKS_HOST_DEV: ${{ secrets.DATABRICKS_HOST_DEV }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
-      # -------------------------------------------------------------
       # Step 4: Validate Databricks Asset Bundle
-      # -------------------------------------------------------------
       - name: Validate bundle configuration
         run: databricks bundle validate
 
-      # -------------------------------------------------------------
       # Step 5: Deploy Asset Bundle to dev environment
-      # -------------------------------------------------------------
       - name: Deploy bundle to dev (force lock)
         run: databricks bundle deploy --target dev --force-lock
 
-      # -------------------------------------------------------------
       # Step 6: Run smoke test notebook via Databricks CLI
-      # -------------------------------------------------------------
       - name: Run smoke test
         run: |
           if [ ! -f smoketest/smoke_test.py ]; then
