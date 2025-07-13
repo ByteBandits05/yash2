@@ -17,12 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Map secrets and environment variables for authentication and deployment
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      DATABRICKS_HOST_DEV: ${{ secrets.DATABRICKS_HOST_DEV }}
-      ROOT_PATH_DEV: ${{ secrets.ROOT_PATH_DEV }}
-      FILE_PATH_DEV: ${{ secrets.FILE_PATH_DEV }}
+      AZURE_CLIENT_ID: 8b375910-2621-4694-876b-3015ae92edc7 
+      #${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: d9ced490-222c-4024-9de1-428aba0706fc
+      #${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_SECRET: cef10c79-b9eb-4f9e-9403-cd481e4b2def
+      #${{ secrets.AZURE_CLIENT_SECRET }}
+      DATABRICKS_HOST_DEV: https://adb-3474497264589105.5.azuredatabricks.net/
+      #${{ secrets.DATABRICKS_HOST_DEV }}
+      ROOT_PATH_DEV: /Workspace/demo/
+      #${{ secrets.ROOT_PATH_DEV }}
+      FILE_PATH_DEV: /Workspace/demo/
+      #${{ secrets.FILE_PATH_DEV }}
       # Add additional environment variables as needed
 
     steps:
