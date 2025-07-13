@@ -1,52 +1,54 @@
-# -----------------------------------------------------------------------------
-# File: databricks.yml
-# Purpose: Databricks Asset Bundle configuration for CI/CD with multi-target support
-# Includes workspace and workflow definitions. All values are parameterized.
-# -----------------------------------------------------------------------------
+# ============================================================
+# FILE: databricks.yml
+# PURPOSE: Databricks Asset Bundle Configuration (DAB) for CI/CD Automation
+# DESCRIPTION: Standards-compliant, parameterized template for multi-environment deployment and reusable smoke-test workflow.
+# ============================================================
 
 bundle:
-  # Bundle name (change as appropriate)
+  # Name of the asset bundle (placeholder for parameterization)
   name: my_bundle
 
-# ----------------------------------------------------------------------
-# Targets for different environments (dev, qa, prod)
-# Each target uses environment variables for host, root_path, and file_path
-# ----------------------------------------------------------------------
+# ------------------------------------------------------------
+# Deployment Targets (dev, qa, prod) with parameterized values
+# ------------------------------------------------------------
 targets:
   dev:
-    default: true  # Mark 'dev' as the default deployment target
+    # Default deployment target
+    default: true
     workspace:
-      host: ${DATABRICKS_HOST_DEV}      # Databricks workspace host for dev
-      root_path: ${ROOT_PATH_DEV}       # Root path in dev workspace
-      file_path: ${FILE_PATH_DEV}       # File path in dev workspace
-
+      host: ${DATABRICKS_HOST_DEV}         # Dev workspace host (parameterized)
+      root_path: ${ROOT_PATH_DEV}          # Dev root path (parameterized)
+      file_path: ${FILE_PATH_DEV}          # Dev file path (parameterized)
   qa:
     workspace:
-      host: ${DATABRICKS_HOST_QA}
-      root_path: ${ROOT_PATH_QA}
-      file_path: ${FILE_PATH_QA}
-
+      host: ${DATABRICKS_HOST_QA}          # QA workspace host (parameterized)
+      root_path: ${ROOT_PATH_QA}           # QA root path (parameterized)
+      file_path: ${FILE_PATH_QA}           # QA file path (parameterized)
   prod:
     workspace:
-      host: ${DATABRICKS_HOST_PROD}
-      root_path: ${ROOT_PATH_PROD}
-      file_path: ${FILE_PATH_PROD}
+      host: ${DATABRICKS_HOST_PROD}        # Prod workspace host (parameterized)
+      root_path: ${ROOT_PATH_PROD}         # Prod root path (parameterized)
+      file_path: ${FILE_PATH_PROD}         # Prod file path (parameterized)
 
-# ----------------------------------------------------------------------
-# Workflows section for reusable job definitions
-# ----------------------------------------------------------------------
-workflows:
-  smoke-test:
-    name: smoke-test
-    tasks:
-      - task_key: smoke_test
-        description: "Run smoke test notebook to validate deployment"
-        existing_cluster_id: ${SMOKE_TEST_CLUSTER_ID}
-        notebook_task:
-          notebook_path: /Workspace/smoketest/smoke_test.py
-    # Cluster and resource config as placeholders
-    cluster:
-      spark_version: ${SMOKE_TEST_SPARK_VERSION}
-      node_type_id: ${SMOKE_TEST_NODE_TYPE}
-      num_workers: ${SMOKE_TEST_NUM_WORKERS}
-     
+# ------------------------------------------------------------
+# Resources: Jobs / Workflows Section (parameterized)
+# ------------------------------------------------------------
+resources:
+  jobs:
+    smoke-test:
+      name: smoke-test
+      # Smoke test task: runs a notebook using a parameterized job cluster
+      tasks:
+        - task_key: smoke_test_task
+          notebook_task:
+            notebook_path: /Workspace/smoketest/smoke_test.py  # Path to smoke test notebook/script
+            source: WORKSPACE
+          job_cluster_key: smoke_job_cluster
+      job_clusters:
+        - job_cluster_key: smoke_job_cluster
+          new_cluster:
+            cluster_name: ""
+            spark_version: ${SMOKE_SPARK_VERSION}
+            node_type_id: ${SMOKE_NODE_TYPE}
+            num_workers: ${SMOKE_NUM_WORKERS}
+            autotermination_minutes: ${SMOKE_AUTOTERM_MINUTES}
