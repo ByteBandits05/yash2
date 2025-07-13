@@ -51,10 +51,10 @@ jobs:
         run: |
           echo "Authenticating with Databricks via OIDC."
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          DATABRICKS_HOST: ${{ DATABRICKS_HOST_DEV }}
+          AZURE_CLIENT_ID: ${{ AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ AZURE_TENANT_ID }}
+          AZURE_CLIENT_SECRET: ${{ AZURE_CLIENT_SECRET }}
 
       # -------------------------------------------------------------
       # Step 3.1: Print debug envs
