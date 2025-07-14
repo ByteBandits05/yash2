@@ -35,7 +35,7 @@ targets:
 # ------------------------------------------------------------
 resources:
   jobs:
-    smoke_test:
+    smoke-test:
       name: smoke-test
       tasks:
         - task_key: smoke_test_task
