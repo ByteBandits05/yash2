@@ -1,60 +1,19 @@
-# -----------------------------------------------------------------------------
-# File: .github/workflows/cicd_pipeline2.yml
-# Purpose: GitHub Actions Workflow for Databricks CI/CD Pipeline using Asset Bundles & OIDC Auth
-# -----------------------------------------------------------------------------
-
-name: Databricks CI/CD Pipeline
+name: Databricks OIDC CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
       DATABRICKS_AUTH_TYPE: github-oidc
-      DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}          # Set Databricks workspace URL from GitHub Environment variable
-      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}  # OIDC credential
-
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
     steps:
-      # -------------------------------------------------------------
-      # Step 1: Checkout repository
-      # -------------------------------------------------------------
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # -------------------------------------------------------------
-      # Step 2: Setup Databricks CLI v2
-      # -------------------------------------------------------------
-      - name: Setup Databricks CLI v2
-        uses: databricks/setup-cli@main
-
-      # -------------------------------------------------------------
-      # Step 3: Print debug environment variables (Do NOT print secrets)
-      # -------------------------------------------------------------
-      - name: Print debug environment variables
-        run: |
-          echo "DATABRICKS_HOST=$DATABRICKS_HOST"
-          echo "DATABRICKS_AUTH_TYPE=$DATABRICKS_AUTH_TYPE"
-          echo "DATABRICKS_CLIENT_ID is set"
-
-      # -------------------------------------------------------------
-      # Step 4: Validate Databricks Asset Bundle
-      # -------------------------------------------------------------
-      - name: Validate bundle configuration
+      - uses: actions/checkout@v4
+      - uses: databricks/setup-cli@main
+      - name: Validate Bundle
         run: databricks bundle validate
-
-      # -------------------------------------------------------------
-      # Step 5: Deploy Asset Bundle to dev environment
-      # -------------------------------------------------------------
-      - name: Deploy bundle to dev (force lock)
+      - name: Deploy Bundle
         run: databricks bundle deploy --target dev --force-lock
-
-      # -------------------------------------------------------------
-      # Step 6: Run smoke test notebook via Databricks CLI
-      # -------------------------------------------------------------
-      - name: Run smoke test workflow
-        run: databricks bundle run test_wf --target dev
